@@ -9,7 +9,7 @@ Output e.g. VST_iblit_PwmBass_1_127_C3
 
 local output_folder = "c:/temp/" -- folder needs to exist
 local instr = renoise.song().selected_instrument
-for _,sample in ipairs(instr.samples) do
+for k,sample in ipairs(instr.samples) do
   local filename = sample.name
   filename = string.gsub(filename,"(.*)_(0x%x%x)_([A-Z])-?(#?%d)",function(a,b,c,d)
     a = string.gsub(a,":","")
@@ -18,7 +18,8 @@ for _,sample in ipairs(instr.samples) do
     return a.."_"..("%d"):format(tonumber(b)).."_"..c..d
   end)
   filename = output_folder .. filename
-  print(filename)
-  --renoise.app():save_instrument_sample(filename)
+  renoise.song().selected_sample_index = k
+  print("Exporting sample:"..filename)
+  renoise.app():save_instrument_sample(filename)
 end
 
